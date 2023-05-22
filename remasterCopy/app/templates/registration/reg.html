@@ -1,0 +1,15 @@
+{% extends '../base.html' %} {% load static %}{% block title %} регистрация {% endblock title %}
+{% block content %}
+<div class="main-content">
+    <div class = 'flex jcc'>
+        <form class = 'shadow p-2' action="." method="post" style="max-width: 350px;">
+            <h2 class = 'center color-black'>Регистрация</h2>
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class = 'flex jcc mt-5'>
+                <button class = 'btn-hello ' style="font-size: 20px;">Создать аккаунт</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock content %}

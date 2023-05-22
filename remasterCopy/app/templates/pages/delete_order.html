@@ -1,0 +1,38 @@
+{% extends '../base.html' %} {% load static %}{% block title %} Удаление заказа {% endblock title %}
+
+{% block content %}
+
+        <h2 class = 'center color-black'>Удаление заказа</h2>
+        
+        <div class = 'shadow mt-5'>
+            <div class ='flex'>
+                <div style='margin-right: 15px;'>
+                    <h3><label>Дата:</label> {{ order.date_create }}</h3>
+                    <h3><label>Статус:</label> {{ order.status }}{% if order.result %} ({{ o.result }}){% endif %}</h3>
+                    <h3><label>Количество:</label> {{ order.amount }} шт.</h3>
+                </div>
+                <div>
+                    {% if o.status.id == 1 %}<a class = 'btn-exit' href="{% url 'delete_order' o.id %}">Отменить заказ</a>{% endif %}
+                </div>
+               
+            </div>
+            <div class = 'flex'>
+                {% for p in order.product %}
+                <div class = 'shadow p-2' style="margin:25px;width: 250px;">
+                    <a style="color: black; text-decoration: none;" href="{% url 'product_detail' p.id %}">
+                        <div style="min-height: 250px; display: flex; align-items: center;"><img src="{{ p.product.image.url }}" alt="Image" style="width: 100%; height:auto;"></div>
+                        <h3><label>Название: </label>{{ p.product.name }}</h3>
+                        <h3><label>Цена: </label>{{ p.product.price }} руб.</h3>
+                        <h3><label>В наличии: </label>{{ p.product.amount }} шт.</h3>
+                        <h3><label>Количество:</label> {{ p.amount }} из {{ p.product.amount }} шт.</h3>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+       
+        </div>
+        <div class = 'flex jcc mt-5'>
+            <a class = 'btn-exit' href="{% url 'delete_order_ok' order.id %}" style ='margin:5px auto; '>Удалить заказ</a>
+        </div>
+
+{% endblock content %}

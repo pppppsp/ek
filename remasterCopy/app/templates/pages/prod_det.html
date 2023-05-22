@@ -1,0 +1,36 @@
+{% extends '../base.html' %} {% load static %}{% block title %} Описание {% endblock title %}
+
+{% block content %}
+<div class='main-content'>
+    <h2 class="center color-black">Описание продукта {{ product.name }} </h2>
+    <div class='flex fx'>
+        <div style="max-width: 450px; width: 100%; min-height: 350px; margin-right: 25px;">
+            <img style="width: 100%; height: auto;" src="{{ product.image.url }}">
+        </div>
+        <div style="margin-top: 25px; font-size: 20px;">
+            <p class = 'color-black'><b>Категория:</b>{{ product.category }}</p>
+            <p class = 'color-black'> <b>Цена:</b>  {{ product.price }} руб.</p>
+            <p class = 'color-black'> <b>Производитель:</b> {{ product.country }}</p>
+            <p class = 'color-black'> <b>Цвет: </b> {{ product.color }}</p>
+            <p class = 'color-black'> <b>Количество:</b> {{ product.amount }} шт.</p>
+            {% if user.is_authenticated %}
+            <button class = "add_to_cart btn-exit mt-5" data-id = "{{ product.id }}">
+                {% if product.cart %}
+                    В корзине {{ product.cart }} шт 
+                {% else %}
+                    В корзину
+                {% endif %}
+            </button>
+             {% endif %}
+        </div>
+    </div>
+</div>
+
+<script> 
+    $(document).on('click', '.add_to_cart', e => { $obj = $(e.target);
+        $.get('/cart_add/' + $obj.data('id'), {}, res => { $obj.html(res)});
+        e.preventDefault();
+        return false;
+    })
+</script>
+{% endblock content %}

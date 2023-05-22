@@ -1,0 +1,54 @@
+{% extends '../base.html' %} {% load static %}{% block title %} Каталог товаров {% endblock title %}
+{% block content %}
+<div class="main-content">
+    <h2 class = 'center'>Каталог товаров</h2>
+    <div class = 'flex fx'>
+        <div style="padding-left:25px; margin-right: 50px;">
+            <div class = 'flex flex-col'>
+                <b class = 'color'>Упорядочить по:</b>
+                <a class = 'mt-2 btn-hello' href="{% url 'catalog' order='country' filter=filter %}">Стране производителя</a>
+                <a class = 'mt-2 btn-hello' href="{% url 'catalog' order='name' filter=filter %}">Наименованию</a>
+                <a class = 'mt-2 btn-hello' href="{% url 'catalog' order='price' filter=filter %}">Цене</a>
+            </div>
+            <div class = 'flex flex-col mt-5'>
+                <b class = 'color'>Фильтровать по:</b>
+                <a class = 'mt-2 btn-hello' href="{% url 'catalog' order=order filter=0 %}">Показать все</a>
+                {% for c in categories %}
+                <a class = 'mt-2 btn-hello' href="{% url 'catalog' order=order filter=c.id %}">{{ c.name }}</a>
+                {% endfor %}
+            </div>
+        </div>
+        <div class = 'flex fx' style="max-width: 1000px;">
+            {% for p in products %}
+            <!-- product -->
+            <div class = 'shadow p-2' style="margin:25px;width: 250px;">
+                <a style="color: black; text-decoration: none;" href="{% url 'product_detail' p.id %}">
+                    <div style="min-height: 250px; display: flex; align-items: center;"><img src="{{ p.image.url }}" alt="Image" style="width: 100%; height:auto;"></div>
+                    <h3><label>Название: </label>{{ p.name }}</h3>
+                    <h3><label>Цена: </label>{{ p.price }} руб.</h3>
+                    <h3><label>В наличии: </label>{{ p.amount }} шт.</h3>
+                    {% if user.is_authenticated %}
+                        {% if p.cart %}
+                        <h3  style="color:brown; margin-top: 5px;"><label>В корзине: </label>{{ p.cart }} шт.</h3>
+                        {% endif %}
+                    {% endif %}
+                </a>
+                {% if user.is_authenticated %}
+                    <button class="add_to_cart btn-exit" data-id="{{ p.id }}">В корзину</button>
+                {% endif %}
+            </div>
+            {% empty %}
+                <p>Бд пустая</p>
+            {% endfor %}
+            <!-- end product  -->
+        </div>
+    </div>
+</div>
+<script>
+    $(document).on('click', '.add_to_cart', e => { $obj = $(e.currentTarget);
+        $.get('/cart_add/' + $obj.data('id'), {}, res => { $obj.html(res)});
+        e.preventDefault();
+        return false;
+    });
+</script>
+{% endblock content %}

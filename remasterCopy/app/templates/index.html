@@ -1,0 +1,47 @@
+{% extends './base.html' %} {% load static %}{% block title %} О нас {% endblock title %}
+{% block content %}
+<div class="main-content" style="padding-left:25px;min-height: 500px;">
+    <div class = 'flex jcb fx'>
+        <div>
+            <img src="{% static 'logo.svg' %}" alt="logo">
+            <h2 class = 'color'>Добро пожаловать в CopyStar!</h2>
+            <h3 class = 'mt-2 color-black '>Вы попали на страницу с информацией про нас!</h3>
+            {% if request.user.is_authenticated %}
+                <h3 class = 'mt-2 color-black '>Вы успешно вошли под пользователем! Пора за покупками: <a class = 'btn-exit' href="{% url 'catalog' order='id' filter=0 %}">Каталог</a></h3>
+            {% else %}
+                <h3 class = 'mt-2 color-black '>Чтобы совершать покупки, вам необходимо <a class = 'btn-exit' href="#">Авторизоваться.</a></h3>
+            {% endif %}
+        </div>
+        <div class="slider">
+            <h3 class = 'color-black'>Новинки компании:</h3>
+            <div class="carousel mt-5">
+                {% for p in products %}
+                <div class="item">
+                    <a href="{% url 'product_detail' p.id %}"">
+                        <div class="product">
+                            <div class="image">
+                                <img class="img" src="{{ p.image.url }}" style="border-radius: 15px; box-shadow: 1px 1px 10px 1px #546C6E;" alt="Image">
+                            </div>
+                            <h3 class = 'color-black mt-2'>Название: {{ p.name }}</h3>
+                            <h3 class = 'color-black mt-2'>Цена: {{ p.price }} руб.</h3>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div>
+        <h2 class = 'center mt-5 color'>Наш девиз</h2>
+        <h3 class = 'center mt-2 color-black' style="max-width:350px; margin:15px auto;">Не хватает хорошего товара? Есть только одно место - CopyStar, где присутствует только отличная и качественная техника!</h3>
+    </div>
+</div>
+<script>
+    let num = 0, $items = $('.carousel .item'); $($items.get(num)).fadeTo(500, 1);
+    setInterval(() => { $($items.get(num)).fadeOut(500, () =>{ num = num + 1;
+    if (num > 4) num = 0;
+        $($items.get(num)).fadeTo(500, 1);
+    });
+    }, 3000);
+</script>
+{% endblock content %}

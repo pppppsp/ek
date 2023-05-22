@@ -1,0 +1,44 @@
+{% extends '../base.html' %} {% load static %}{% block title %} Моя корзина {% endblock title %}
+
+{% block content %}
+<h2 class='center'>Моя корзина</h2>
+{% if products %}
+<div class = 'flex jcc'>
+    <a class = 'btn-exit' href="{% url 'create_order' %}" style ='margin:5px auto; '>Оформить заказ</a>
+</div>
+<div class = 'flex fx'>
+    {% for p in products %}
+    <div class='shadow p-2' style="margin:25px;width: 250px;">
+        <a style="color: black; text-decoration: none;" href="{% url 'product_detail' p.id %}">
+            <div style="min-height: 250px; display: flex; align-items: center;"><img src="{{ p.product.image.url }}" alt="Image"
+                    style="width: 100%; height:auto;"></div>
+            <h3><label>Название: </label>{{ p.product.name }}</h3>
+            <h3><label>Цена: </label>{{ p.product.price }} руб.</h3>
+            <h3><label>В наличии: </label>{{ p.product.amount }} шт.</h3>
+        </a>
+        <div class ='flex jcc align-items-center mt-2'>
+            <button class="sub_from_cart btn-exit" data-id="{{ p.product.id }}"> -</button>
+            <label style="margin: 10px;"> В корзине {{ p.amount }} шт </label>
+            <button class="add_from_cart btn-exit" data-id="{{ p.product.id }}"> +
+            </button>
+        </div>
+        
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<h3 class='center'>Пока пусто</h3>
+{% endif %}
+<script> 
+    $(document).on('click', '.add_from_cart', e => { $obj = $(e.target);
+        $.get('/cart_add/' + $obj.data('id'), {}, res => { $obj.prev().html(res)});
+        e.preventDefault();
+        return false;
+    })
+    $(document).on('click', '.sub_from_cart', e => { $obj = $(e.target);
+        $.get('/cart_sub/' + $obj.data('id'), {}, res => { $obj.next().html(res)});
+        e.preventDefault();
+        return false;
+    })
+</script>
+{% endblock content %}

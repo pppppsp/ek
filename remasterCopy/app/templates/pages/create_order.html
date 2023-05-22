@@ -1,0 +1,14 @@
+{% extends '../base.html' %} {% load static %}{% block title %} Подтверждение заказа {% endblock title %}
+{% block content %}
+<div class = 'jcc' style='display: flex; align-items: center;'>
+    <div>
+        <h2 class="center">Подтверждение</h2>
+        <form method="post">
+          {% csrf_token %}
+          {{ form.as_p }}
+          <button class = 'btn-exit' type="submit" style="display: block; margin:15px auto;">Сформировать заказ</button>
+      </form>
+    </div>
+    
+</div>
+{% endblock %}
